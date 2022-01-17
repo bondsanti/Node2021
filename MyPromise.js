@@ -2,6 +2,9 @@
 
 const connect = false
 const url1 = "santi.dev/file1.json"
+const url2 = "santi.dev/file2.json"
+const url3 = "santi.dev/file3.json"
+
 
 function downloading(url) {
     return new Promise(function(resolve, reject) {
@@ -20,7 +23,25 @@ function downloading(url) {
 }
 
 
+// downloading(url1).then(result => {
+//     console.log(result)
+//     downloading(url2).then(result => {
+//         console.log(result)
+//         downloading(url3).then(result => {
+//             console.log(result)
+//         })
+//     })
+// }).catch(error => {
+//     console.log(error)
+// })
+
 downloading(url1).then(result => {
+    console.log(result)
+    return downloading(url2)
+}).then(result => {
+    console.log(result)
+    return downloading(url3)
+}).then(result => {
     console.log(result)
 }).catch(error => {
     console.log(error)
