@@ -1,0 +1,23 @@
+{
+  "name": "node2021",
+  "version": "1.0.0",
+  "description": "node for learning",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start":"nodemon ./bin/www"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bondsanti/Node2021.git"
+  },
+  "author": "sicdev",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bondsanti/Node2021/issues"
+  },
+  "homepage": "https://github.com/bondsanti/Node2021#readme",
+  "dependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
