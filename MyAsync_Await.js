@@ -17,33 +17,20 @@ function downloading(url) {
 
                 reject('เกิดข้อผิดพลาด')
             }
-        }, 3000)
+        }, 1000)
     })
 
 }
 
-// Promise Hell
-// downloading(url1).then(result => {
-//     console.log(result)
-//     downloading(url2).then(result => {
-//         console.log(result)
-//         downloading(url3).then(result => {
-//             console.log(result)
-//         })
-//     })
-// }).catch(error => {
-//     console.log(error)
-// })
+//Async & Await
 
-//Promise Then
-downloading(url1).then(result => {
-    console.log(result)
-    return downloading(url2)
-}).then(result => {
-    console.log(result)
-    return downloading(url3)
-}).then(result => {
-    console.log(result)
-}).catch(error => {
-    console.log(error)
-})
+async function start() {
+    console.log(await downloading(url1))
+    console.log(await downloading(url2))
+    console.log(await downloading(url3))
+}
+
+//เรียกใช้งาน
+
+start()
+// api ภาพสินค้า (backend -> frontend ) แสดงภาพในเว็บ
