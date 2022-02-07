@@ -32,22 +32,63 @@ const upload = multer({
 
 router.get('/',(req,res) =>{
 
-    //const product = ["เสื้อ","กระเป๋า","รองเท้า","กางเกง","ถุงเท้า"]
-    const product = [{name:"โน๊ตบุ๊ค",price:12000,pic:"images/products/product1.png"},
-    {name:"เสื้อ",price:1500,pic:"images/products/product2.png"},
-    {name:"หูฟัง",price:900,pic:"images/products/product3.png"}]
-    res.render('index.ejs',{product:product})
+    // const product = ["เสื้อ","กระเป๋า","รองเท้า","กางเกง","ถุงเท้า"]
+    // const product = [{name:"โน๊ตบุ๊ค",price:12000,pic:"images/products/product1.png"},
+    // {name:"เสื้อ",price:1500,pic:"images/products/product2.png"},
+    // {name:"หูฟัง",price:900,pic:"images/products/product3.png"}]
+    // res.render('index.ejs',{product:product})
+    Product.find().exec((err,doc)=>{
+        res.render('index',{product:doc})
+    })
 })
 
 router.get('/form',(req,res)=>{
     res.render('form')
 })
 router.get('/manage',(req,res)=>{
-    res.render('manage')
+    Product.find().exec((err,doc)=>{
+        res.render('manage',{product:doc})
+    })
 })
-router.get('/product',(req,res)=>{
-    res.render('product')
+router.get('/delete/:id',(req,res)=>{
+
+    //console.log(req.params.id);
+    Product.findByIdAndDelete(req.params.id,{
+        useFindAndModify:false
+    }).exec(err=>{
+        res.redirect('/manage')
+    })
 })
+router.get('/:id',(req,res)=>{
+
+    Product.findOne({_id:req.params.id}).exec((err,doc)=>{
+       //console.log(doc);
+       res.render('product',{product:doc})
+    })
+})
+
+router.post('/edit',(req,res)=>{
+  
+   Product.findOne({_id:req.body.edit_id}).exec((err,doc)=>{
+    //console.log(doc);
+    res.render('edit',{product:doc})
+ })
+})
+
+router.post('/update',(req,res)=>{
+   
+    let data = {
+        name:req.body.name,
+        price:req.body.price,
+        detail:req.body.detail
+    }
+
+    Product.findByIdAndUpdate(req.body.edit_id,data,{useFindAndModify:false}).exec(err=>{
+        res.redirect('/manage')
+    })
+
+})
+
 router.post('/insert',upload.single("pic"),(req,res)=>{
     //console.log(req.body);
     //console.log(req.file);
