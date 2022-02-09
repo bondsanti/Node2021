@@ -43,13 +43,36 @@ router.get('/',(req,res) =>{
 })
 
 router.get('/form',(req,res)=>{
-    res.render('form')
+
+    if(req.session.login){
+        res.render('form')
+    }else{
+        res.render('admin')  
+    }
+
 })
 router.get('/manage',(req,res)=>{
-    Product.find().exec((err,doc)=>{
-        res.render('manage',{product:doc})
-    })
+
+    if(req.session.login){
+        Product.find().exec((err,doc)=>{
+            res.render('manage',{product:doc})
+        })
+    }else{
+        res.render('admin')  
+    }
+   
 })
+
+router.get('/logout',(req,res)=>{
+    // res.clearCookie('username')
+    // res.clearCookie('password')
+    // res.clearCookie('login')
+    req.session.destroy((err)=>{
+        res.redirect('/manage')
+    })
+    
+})
+
 router.get('/delete/:id',(req,res)=>{
 
     //console.log(req.params.id);
@@ -66,6 +89,8 @@ router.get('/:id',(req,res)=>{
        res.render('product',{product:doc})
     })
 })
+
+
 
 router.post('/edit',(req,res)=>{
   
@@ -104,6 +129,27 @@ router.post('/insert',upload.single("pic"),(req,res)=>{
     })
     res.redirect('/form')
 })
+
+router.post('/login',(req,res)=>{
+    const username= req.body.username
+    const password = req.body.password
+    const timeExpire = 30000 // 30 วินาที
+
+    if(username==="admin"&& password==="admin"){
+          req.session.username = username
+          req.session.password = password
+          req.session.login = true
+          req.session.cookie.maxAge=timeExpire
+        // res.cookie('username',username,{maxAge:timeExpire})
+        // res.cookie('password',password,{maxAge:timeExpire})
+        // res.cookie('login',true,{maxAge:timeExpire}) // true  เข้าสู่ระบบแล้ว
+        res.redirect('/manage')
+    }else{
+        res.render('404')
+    }
+})
+
+
 const path = require('path')
 
 
